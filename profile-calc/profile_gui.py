@@ -5,7 +5,7 @@ import sys
 import configparser
 import requests
 
-key = input("API key (get it at https://osu.ppy.sh/p/api): ")
+key = input("API key (get it at https://old.ppy.sh/p/api): ")
 
 username = input("profile username? ")
 
