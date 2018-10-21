@@ -4,4 +4,4 @@ There are two directories in this project: "map-calc", which calculates a specif
 
 You should run "gui.py" for map calculation and "profile_gui.py" for profile calculation.
 
-If you are calculating a profile, you will need to type your API key into the "keys.cfg" file. You can get an API key at this website: https://osu.ppy.sh/p/api
+If you are calculating a profile, you will need your API key. You can get an API key at this website: https://osu.ppy.sh/p/api
