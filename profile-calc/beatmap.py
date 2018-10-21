@@ -234,7 +234,7 @@ class Beatmap:
                 raise Exception("??????????")
         except Exception as e:
             print(e)
-            sys.exit(1)
+            #sys.exit(1)
 
     def apply_mods(self, mods):
         # Ugly shouldput somewhere else

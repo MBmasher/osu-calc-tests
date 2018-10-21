@@ -41,9 +41,14 @@ def sort_values(sort_by):
     tree.heading("3", text="Percent Change")
 
     for i in sorted_list:
-        tree.insert("", "end", text=i[0], values=("{:.2f}PP".format(i[2]),
-                                                  "{:.2f}PP".format(i[1]),
-                                                  "{:.2f}%".format(100 * i[1] / float(i[2]))))
+        try:
+            tree.insert("", "end", text=i[0], values=("{:.2f}PP".format(i[2]),
+                                                      "{:.2f}PP".format(i[1]),
+                                                      "{:.2f}%".format(100 * i[1] / float(i[2]))))
+        except:
+            tree.insert("", "end", text=i[0], values=("{:.2f}PP".format(i[2]),
+                                                      "{:.2f}PP".format(i[1]),
+                                                      "{:.2f}%".format(0)))
 
     tree.pack(fill='both', expand=True)
 
@@ -114,9 +119,14 @@ while True:
                    sorted(pp_info, key=lambda x: x[1], reverse=True)]
 
     for i in sorted_list:
-        tree.insert("", "end", text=i[0], values=("{:.2f}PP".format(i[2]),
-                                                  "{:.2f}PP".format(i[1]),
-                                                  "{:.2f}%".format(100 * i[1] / float(i[2]))))
+        try:
+            tree.insert("", "end", text=i[0], values=("{:.2f}PP".format(i[2]),
+                                                      "{:.2f}PP".format(i[1]),
+                                                      "{:.2f}%".format(100 * i[1] / float(i[2]))))
+        except:
+            tree.insert("", "end", text=i[0], values=("{:.2f}PP".format(i[2]),
+                                                      "{:.2f}PP".format(i[1]),
+                                                      "{:.2f}%".format(0)))
 
     tree.pack(fill="both", expand=True)
 
