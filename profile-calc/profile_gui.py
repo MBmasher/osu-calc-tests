@@ -63,12 +63,33 @@ try:
     profile_list = [i.split(":") for i in profile_info]
     profile_pp = float(profile_list[10][1][1:-1])
 except:
+    try:
+        url = 'https://osu.ppy.sh/api/get_user?k={}&u=peppy'.format(key)
+        jsonurl = str(requests.get(url).text)
+        jsonurl = jsonurl[1:-2]
+        profile_split = jsonurl.split("},")[0]
+        profile_info = profile_split[1:-1].split(",")
+        profile_list = [i.split(":") for i in profile_info]
+        profile_pp = float(profile_list[10][1][1:-1])
+    except:
+        while True:
+            root = Tk()
+            root.title("osu-calc")
+
+            w = Text(root)
+            w.insert(1.0,"Invalid API key. Make sure that you have typed your API key correctly.")
+            w.pack()
+            w.configure(state="disabled")
+
+            root.protocol("WM_DELETE_WINDOW", kill)
+
+            root.mainloop()
     while True:
         root = Tk()
         root.title("osu-calc")
 
         w = Text(root)
-        w.insert(1.0,"Invalid API key. Make sure that you have typed your API key correctly.")
+        w.insert(1.0, "Invalid username. Check to see if you made a typo or maybe the user is restricted.")
         w.pack()
         w.configure(state="disabled")
 
