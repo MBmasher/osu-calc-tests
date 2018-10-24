@@ -112,5 +112,6 @@ def main(file):
     stars = aim + speed + abs(speed-aim) * extreme_scaling_factor
 
     length_bonus = -1.28 + 1.6 * ((2 + math.log10(aim_total + speed_total)) / (2 + math.log10(stars)) - 1)
+    length_bonus = 1 + 9 ** (length_bonus-1.5) - 9**-0.5
 
     return [aim,speed,stars, map, length_bonus]
