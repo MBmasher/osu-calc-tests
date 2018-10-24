@@ -11,7 +11,7 @@ def kill():
 
 
 def calculate_pp():
-    global map_link, c100, c50, miss, combo, info_l, alpha, beta, c_, d_
+    global map_link, c100, c50, miss, combo, info_l, alpha, beta, c_, d_, e_, f_
     info_l["text"] = calc.return_values(c100.get(),
                                         c50.get(),
                                         miss.get(),
@@ -21,7 +21,9 @@ def calculate_pp():
                                         (float(alpha.get()),
                                          float(beta.get()),
                                          float(c_.get()),
-                                         float(d_.get())))
+                                         float(d_.get()),
+                                         float(e_.get()),
+                                         float(f_.get())))
 
 
 while True:
@@ -39,7 +41,9 @@ while True:
     tkinter.Label(root, text="beta:").grid(row=7, column=0)
     tkinter.Label(root, text="c:").grid(row=8, column=0)
     tkinter.Label(root, text="d:").grid(row=9, column=0)
-    tkinter.Label(root, text="Proposed variables: alpha=1, beta=1.6, c=-1.28, d=1.12").grid(row=10, column=0, columnspan=2)
+    tkinter.Label(root, text="e:").grid(row=10, column=0)
+    tkinter.Label(root, text="f:").grid(row=11, column=0)
+    tkinter.Label(root, text="Proposed variables: alpha=1, beta=1.6, c=-1.28, d=1.12, e=9, f=1.5").grid(row=12, column=0, columnspan=2)
 
     map_link = tkinter.Entry(root, width=40)
     map_link.grid(row=0, column=1)
@@ -71,10 +75,16 @@ while True:
     d_ = tkinter.Entry(root, width=40)
     d_.grid(row=9, column=1)
 
-    tkinter.Button(root, fg="blue", text="Calculate pp!", command=calculate_pp).grid(row=11, column=0, columnspan=2)
+    e_ = tkinter.Entry(root, width=40)
+    e_.grid(row=10, column=1)
+
+    f_ = tkinter.Entry(root, width=40)
+    f_.grid(row=11, column=1)
+
+    tkinter.Button(root, fg="blue", text="Calculate pp!", command=calculate_pp).grid(row=13, column=0, columnspan=2)
 
     info_l = tkinter.Label(root)
-    info_l.grid(row=12, column=0, columnspan=2)
+    info_l.grid(row=14, column=0, columnspan=2)
 
     # If window is closed, stop the program.
     root.protocol("WM_DELETE_WINDOW", kill)
