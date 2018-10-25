@@ -1,4 +1,4 @@
-# osu-calc-length-bonus
+# osu-calc-fl-patch
 
 Original program by HyperBCS: https://github.com/HyperBCS/osu-calc
 
