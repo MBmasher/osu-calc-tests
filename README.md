@@ -1,5 +1,7 @@
 # osu-calc-length-bonus
 
+Original program by HyperBCS: https://github.com/HyperBCS/osu-calc
+
 There are two directories in this project: "map-calc", which calculates a specific map, and "profile-calc", which calculates play for a whole profile.
 
 You should run "gui.py" for map calculation and "profile_gui.py" for profile calculation.
