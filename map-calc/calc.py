@@ -74,7 +74,7 @@ def set_mods(mod, m):
         mod.so = 1
 
 
-def return_values(c100_s, c50_s, misses_s, combo_s, file_name, mod_s, balancing_values):
+def return_values(c100_s, c50_s, misses_s, combo_s, file_name, mod_s):
     try:
         file = requests.get(b_info.main(file_name)).text.splitlines()
     except:
@@ -123,8 +123,8 @@ def return_values(c100_s, c50_s, misses_s, combo_s, file_name, mod_s, balancing_
 
     mod_string = mod_str(mod)
     map.apply_mods(mod)
-    diff = diff_calc.main(map, balancing_values)
-    pp, aim_value, speed_value, acc_value, length_bonus, new_length_bonus, speed_length = pp_calc.pp_calc(diff[0], diff[1], diff[3], diff[4], diff[5], misses, c100, c50, mod, combo)
+    diff = diff_calc.main(map)
+    pp, aim_value, speed_value, acc_value, fl_pp, length_bonus, fl_length_bonus = pp_calc.pp_calc(diff[0], diff[1], diff[3], misses, c100, c50, mod, combo)
 
     title = map.artist + " - " + map.title + "[" + map.version + "]"
     if mod_string != "":
@@ -143,12 +143,10 @@ def return_values(c100_s, c50_s, misses_s, combo_s, file_name, mod_s, balancing_
     aim_vs = "Aim Value: {:.2f}PP\n".format(aim_value)
     speed_vs = "Speed Value: {:.2f}PP\n".format(speed_value)
     acc_vs = "Acc Value: {:.2f}PP\n\n".format(acc_value)
-    aim_ts = "Aim Total Value: {:.0f}\n".format(diff[6][1])
-    speed_ts = "Speed Total Value: {:.0f}\n\n".format(diff[7][1])
-    length_os = "Old Length Bonus: {:.4f}\n".format(length_bonus)
-    length_as = "New Length Bonus: {:.4f}\n\n".format(new_length_bonus)
+    length_o = "Old FL Length Bonus: {:.2f}\n".format(length_bonus)
+    length_f = "New FL Length Bonus: {:.2f}\n\n".format(fl_length_bonus)
     pp_s = "Performance: {:.2f}PP\n".format(pp.pp)
+    pp_l = "Performance After FL rework: {:.2f}PP\n".format(fl_pp)
 
     return (map_s + difficulty_settings + stars + acc + circle_s + slider_s + spinner_s + object_s
-            + comb_s + miss_s + aim_vs + speed_vs + acc_vs + aim_ts
-            + speed_ts + length_os + length_as + pp_s)
+            + comb_s + miss_s + aim_vs + speed_vs + acc_vs + length_o + length_f + pp_s + pp_l)

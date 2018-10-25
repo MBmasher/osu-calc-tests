@@ -39,7 +39,7 @@ class pp_calc_result:
         self.acc_pp = 0
 
 
-def pp_calc(aim, speed, b, length_bonus, speed_length, misses, c100, c50, used_mods=mods(), combo=0xFFFF, score_version=1, c300=0xFFFF):
+def pp_calc(aim, speed, b, misses, c100, c50, used_mods=mods(), combo=0xFFFF, score_version=1, c300=0xFFFF):
     res = pp_calc_result()
     od = b.od
     ar = b.ar
@@ -72,7 +72,7 @@ def pp_calc(aim, speed, b, length_bonus, speed_length, misses, c100, c50, used_m
     aim_value = base_strain(aim)
 
     total_hits_over_2k = total_hits / 2000.0
-    old_length_bonus = 0.95 + 0.4 * min(1.0, total_hits_over_2k) + (
+    length_bonus = 0.95 + 0.4 * min(1.0, total_hits_over_2k) + (
         math.log10(total_hits_over_2k) * 0.5 if total_hits > 2000 else 0.0)
 
     miss_penalty = math.pow(0.97, misses)
@@ -100,15 +100,22 @@ def pp_calc(aim, speed, b, length_bonus, speed_length, misses, c100, c50, used_m
     if used_mods.hd:
         aim_value *= 1.02 + (11 - ar) / 50
 
-    if used_mods.fl:
-        aim_value *= 1.45 * length_bonus
-
     acc_bonus = 0.5 + acc / 2.0
 
     od_bonus = 0.98 + math.pow(od, 2) / 2500.0
 
     aim_value *= acc_bonus
     aim_value *= od_bonus
+
+    fl_aim_value = aim_value
+
+    fl_aim_bonus = 1 + 0.35 * min(1, total_hits / 250)
+    if total_hits > 250: fl_aim_bonus += 0.3 * min(1, (total_hits - 250) / 250)
+    if total_hits > 500: fl_aim_bonus += (total_hits - 500) / 1200
+
+    if used_mods.fl:
+        aim_value *= 1.45 * length_bonus
+        fl_aim_value *= fl_aim_bonus
 
     res.aim_pp = aim_value
 
@@ -158,7 +165,9 @@ def pp_calc(aim, speed, b, length_bonus, speed_length, misses, c100, c50, used_m
         final_multiplier *= 0.95
     res.pp = math.pow(math.pow(aim_value, 1.1) + math.pow(speed_value, 1.1) + math.pow(acc_value, 1.1),
                       1.0 / 1.1) * final_multiplier
-    return res, aim_value, speed_value, acc_value, old_length_bonus, length_bonus, 0
+    new_pp = math.pow(math.pow(fl_aim_value, 1.1) + math.pow(speed_value, 1.1) + math.pow(acc_value, 1.1),
+                      1.0 / 1.1) * final_multiplier
+    return res, aim_value, speed_value, acc_value, new_pp, 1.45*length_bonus, fl_aim_bonus
 
 
 def pp_calc_acc(aim, speed, b, acc_percent, used_mods=mods(), combo=0xFFFF, misses=0, score_version=1):

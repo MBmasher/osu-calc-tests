@@ -1,7 +1,7 @@
 import math
 
 
-def main(file, balancing_values):
+def main(file):
     map = file
     objects = []
     radius = (512 / 16) * (1. - 0.7 * (map.cs - 5) / 5);
@@ -92,34 +92,20 @@ def main(file, balancing_values):
             prev = new
             max_strain = max(new.strains[type], max_strain)
         # print max_strain
-        total = 0
         difficulty = 0
         weight = 1.0
         highest_strains = sorted(highest_strains, reverse=True)
         for strain in highest_strains:
-            total += strain ** balancing_values[3]
             difficulty += weight * strain
             weight *= decay_weight
-        print_values = [total, difficulty]
-        return difficulty, print_values
-
+        return difficulty
 
     star_scaling_factor = 0.0675
     extreme_scaling_factor = 0.5
-    aim, aim_print_values = calculate_difficulty(1, objects)
-    speed, speed_print_values = calculate_difficulty(0, objects)
+    aim = calculate_difficulty(1, objects)
+    speed = calculate_difficulty(0, objects)
     aim = math.sqrt(aim) * star_scaling_factor
     speed = math.sqrt(speed) * star_scaling_factor
 
-
     stars = aim + speed + abs(speed - aim) * extreme_scaling_factor
-
-    alpha = balancing_values[0]
-    beta = balancing_values[1]
-    c = balancing_values[2]
-    aim_total = aim_print_values[0]
-    speed_total = speed_print_values[0]
-
-    length_bonus = -1.28 + 1.6 * ((2 + math.log(aim_total + speed_total, 10)) / (2 + math.log(stars, 10)) - 1)
-
-    return [aim, speed, stars, map, length_bonus, 0, aim_print_values, speed_print_values]
+    return [aim, speed, stars, map]

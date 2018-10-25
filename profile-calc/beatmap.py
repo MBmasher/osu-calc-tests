@@ -231,10 +231,10 @@ class Beatmap:
             # print "Max combo: "+str(self.max_combo)
             if valid != True:
                 print("ERROR: Unsupported gamemode")
-                raise Exception("??????????")
-        except Exception as e:
-            print(e)
-            #sys.exit(1)
+                raise ()
+        except:
+            print("ERROR: Processing beatmap failed")
+            sys.exit(1)
 
     def apply_mods(self, mods):
         # Ugly shouldput somewhere else

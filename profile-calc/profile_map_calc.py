@@ -136,7 +136,7 @@ def return_values(c100, c50, misses, combo, map_id, mod_s):
         diff[0], diff[1],
         diff[3],
         misses,
-        c100, c50, diff[4], mod,
+        c100, c50, mod,
         combo)
 
     title = map.artist + " - " + map.title + "[" + map.version + "]"
@@ -144,4 +144,4 @@ def return_values(c100, c50, misses, combo, map_id, mod_s):
         title += "+" + mod_string
     title += " (" + map.creator + ")"
 
-    return (str(title), pp.pp)
+    return (str(title), pp[0].pp)
