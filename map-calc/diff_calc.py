@@ -96,6 +96,7 @@ def main(file, balancing_values):
         difficulty = 0
         weight = 1.0
         highest_strains = sorted(highest_strains, reverse=True)
+        print(len(highest_strains))
         for strain in highest_strains:
             total += strain ** balancing_values[3]
             difficulty += weight * strain
@@ -117,9 +118,13 @@ def main(file, balancing_values):
     alpha = balancing_values[0]
     beta = balancing_values[1]
     c = balancing_values[2]
+
     aim_total = aim_print_values[0]
+    aim_difficulty = aim_print_values[1]
     speed_total = speed_print_values[0]
+    speed_difficulty = speed_print_values[1]
 
-    length_bonus = -1.28 + 1.6 * ((2 + math.log(aim_total + speed_total, 10)) / (2 + math.log(stars, 10)) - 1)
+    aim_length_bonus = c + beta * (math.log10(aim_total/aim_difficulty) - alpha)
+    speed_length_bonus = c + beta * (math.log10(speed_total/speed_difficulty) - alpha)
 
-    return [aim, speed, stars, map, length_bonus, 0, aim_print_values, speed_print_values]
+    return [aim, speed, stars, map, aim_length_bonus, speed_length_bonus, aim_print_values, speed_print_values]

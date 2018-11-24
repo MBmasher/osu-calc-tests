@@ -11,7 +11,7 @@ def kill():
 
 
 def calculate_pp():
-    global map_link, c100, c50, miss, combo, info_l, alpha, beta, c_, d_
+    global map_link, c100, c50, miss, combo, info_l, alpha, beta, d_
     info_l["text"] = calc.return_values(c100.get(),
                                         c50.get(),
                                         miss.get(),
@@ -39,7 +39,7 @@ while True:
     tkinter.Label(root, text="beta:").grid(row=7, column=0)
     tkinter.Label(root, text="c:").grid(row=8, column=0)
     tkinter.Label(root, text="d:").grid(row=9, column=0)
-    tkinter.Label(root, text="Proposed variables: alpha=1, beta=1.6, c=-1.28, d=1.12").grid(row=10, column=0, columnspan=2)
+    tkinter.Label(root, text="Proposed variables: alpha=??, beta=??, c=??, d=??").grid(row=10, column=0, columnspan=2)
 
     map_link = tkinter.Entry(root, width=40)
     map_link.grid(row=0, column=1)
