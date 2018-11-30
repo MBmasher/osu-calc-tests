@@ -1,6 +1,6 @@
-from __future__ import division
 import math
 import diff_calc
+
 
 class mods:
     def __init__(self):
@@ -17,8 +17,10 @@ class mods:
         speed_changing = self.dt | self.ht | self.nc
         map_changing = self.hr | self.ez | speed_changing
 
+
 def base_strain(strain):
     return math.pow(5.0 * max(1.0, strain / 0.0675) - 4.0, 3.0) / 100000.0
+
 
 def acc_calc(c300, c100, c50, misses):
     total_hits = c300 + c100 + c50 + misses
@@ -26,6 +28,7 @@ def acc_calc(c300, c100, c50, misses):
     if total_hits > 0:
         acc = (c50 * 50.0 + c100 * 100.0 + c300 * 300.0) / (total_hits * 300.0)
     return acc
+
 
 class pp_calc_result:
     def __init__(self):
@@ -35,7 +38,8 @@ class pp_calc_result:
         self.speed_pp = 0
         self.acc_pp = 0
 
-def pp_calc(aim, speed, b, misses, c100, c50, length_bonus, used_mods = mods() ,combo = 0xFFFF, score_version = 1, c300 = 0xFFFF):
+
+def pp_calc(aim, speed, b, aim_length, speed_length, misses, c100, c50, used_mods=mods(), combo=0xFFFF, score_version=1, c300=0xFFFF):
     res = pp_calc_result()
     od = b.od
     ar = b.ar
@@ -62,34 +66,21 @@ def pp_calc(aim, speed, b, misses, c100, c50, length_bonus, used_mods = mods() ,
         print("Score version not found")
         return res
 
-    acc = acc_calc(c300,c100,c50,misses)
+    acc = acc_calc(c300, c100, c50, misses)
     res.acc_percent = acc * 100.0
 
     aim_value = base_strain(aim)
 
     total_hits_over_2k = total_hits / 2000.0
-    low_combo_multiplier = min(0.5, 0.59 + (-0.59 * math.e ** (-0.0038 * total_hits)))
-    low_combo_multiplier = min(0.95 + min(0.1, total_hits/5000), 0.55 + low_combo_multiplier + max(0, 0.4 - (aim_value / 12.5)))
-    bigger_than_500 = 0
-    bigger_than_2000 = 0
+    old_length_bonus = 0.95 + 0.4 * min(1.0, total_hits_over_2k) + (
+        math.log10(total_hits_over_2k) * 0.5 if total_hits > 2000 else 0.0)
 
-    if total_hits > 500:
-        bigger_than_500 = 0.3 * min(1, (total_hits - 500) / 1500)
-    if total_hits > 2000:
-        bigger_than_2000 = math.log10(total_hits / 2000) * 0.5
+    miss_penalty = math.pow(0.97, misses)
 
-    #length_bonus = low_combo_multiplier + bigger_than_2000 + bigger_than_500
+    combo_break = math.pow(combo, 0.8) / math.pow(b.max_combo, 0.8)
 
-    #length_bonus = 0.95 + 0.4*min(1, total_hits/2000) + bigger_than_2000
-
-    miss_penalty = math.pow(0.97,misses)
-
-    combo_break = math.pow(combo, 0.8) / math.pow(b.max_combo,0.8)
-
-    aim_value *= length_bonus
     aim_value *= miss_penalty
     aim_value *= combo_break
-
 
     ar_bonus = 1.0
 
@@ -108,21 +99,22 @@ def pp_calc(aim, speed, b, misses, c100, c50, length_bonus, used_mods = mods() ,
     if used_mods.hd:
         aim_value *= 1.02 + (11 - ar) / 50
 
-    if used_mods.fl:
-        aim_value *= max(1, 1.45 * length_bonus)
-
     acc_bonus = 0.5 + acc / 2.0
 
-    od_bonus = 0.98 + math.pow(od,2) / 2500.0
+    od_bonus = 0.98 + math.pow(od, 2) / 2500.0
 
     aim_value *= acc_bonus
     aim_value *= od_bonus
+
+    if used_mods.fl:
+        aim_value *= 1.45 * old_length_bonus
+
+    aim_value *= aim_length
 
     res.aim_pp = aim_value
 
     speed_value = base_strain(speed)
 
-    speed_value *= length_bonus
     speed_value *= miss_penalty
     speed_value *= combo_break
     speed_value *= acc_bonus
@@ -130,6 +122,8 @@ def pp_calc(aim, speed, b, misses, c100, c50, length_bonus, used_mods = mods() ,
 
     if used_mods.hd:
         speed_value *= 1.18
+
+    speed_value *= speed_length
 
     res.speed_pp = speed_value
 
@@ -141,7 +135,7 @@ def pp_calc(aim, speed, b, misses, c100, c50, length_bonus, used_mods = mods() ,
     else:
         if circles:
             real_acc = ((c300 - (total_hits - circles)) * 300.0 + c100 * 100.0 + c50 * 50.0) / (circles * 300)
-        real_acc = max(0.0,real_acc)
+        real_acc = max(0.0, real_acc)
 
     acc_value = math.pow(1.52163, od) * math.pow(real_acc, 24.0) * 2.83
 
@@ -162,11 +156,13 @@ def pp_calc(aim, speed, b, misses, c100, c50, length_bonus, used_mods = mods() ,
 
     if used_mods.so:
         final_multiplier *= 0.95
-    res.pp = math.pow(math.pow(aim_value,1.1) + math.pow(speed_value,1.1) + math.pow(acc_value, 1.1), 1.0 / 1.1) * final_multiplier
-    return res;
+    res.pp = math.pow(math.pow(aim_value, 1.1) + math.pow(speed_value, 1.1) + math.pow(acc_value, 1.1),
+                      1.0 / 1.1) * final_multiplier
+    return res
 
-def pp_calc_acc(aim, speed, b, acc_percent, used_mods = mods(), combo = 0xFFFF, misses = 0,score_version = 1):
-    misses = min(b.num_objects,misses)
+
+def pp_calc_acc(aim, speed, b, acc_percent, used_mods=mods(), combo=0xFFFF, misses=0, score_version=1):
+    misses = min(b.num_objects, misses)
 
     max300 = (b.num_objects - misses)
 
@@ -186,4 +182,4 @@ def pp_calc_acc(aim, speed, b, acc_percent, used_mods = mods(), combo = 0xFFFF, 
 
     c300 = b.num_objects - c100 - c50 - misses
 
-    return pp_calc(aim,speed,b,misses,c100,c50,used_mods, combo, score_version,c300)
+    return pp_calc(aim, speed, b, misses, c100, c50, used_mods, combo, score_version, c300)

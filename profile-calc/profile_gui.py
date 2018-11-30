@@ -61,7 +61,7 @@ try:
     profile_split = jsonurl.split("},")[0]
     profile_info = profile_split[1:-1].split(",")
     profile_list = [i.split(":") for i in profile_info]
-    profile_pp = float(profile_list[10][1][1:-1])
+    profile_pp = float(profile_list[11][1][1:-1])
 except:
     try:
         url = 'https://osu.ppy.sh/api/get_user?k={}&u=peppy'.format(key)
@@ -70,7 +70,7 @@ except:
         profile_split = jsonurl.split("},")[0]
         profile_info = profile_split[1:-1].split(",")
         profile_list = [i.split(":") for i in profile_info]
-        profile_pp = float(profile_list[10][1][1:-1])
+        profile_pp = float(profile_list[11][1][1:-1])
     except:
         while True:
             root = Tk()
@@ -98,7 +98,6 @@ except:
         root.mainloop()
 
 while True:
-
     root = Tk()
     root.resizable(width=False, height=True)
     root.geometry("1200x800")

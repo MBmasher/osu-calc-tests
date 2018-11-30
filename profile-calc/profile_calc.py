@@ -38,8 +38,8 @@ def return_values(user, key):
 
         try:
             pp_info.append(profile_map_calc.return_values(c100, c50, miss, combo, beatmap_id, mods) + (old_pp,))
-        except:
-            pp_info.append(("Error processing this beatmap.",0,0))
+        except Exception as e:
+            pp_info.append(("Error processing this beatmap. Exception: {}".format(e),0,0))
 
     print(pp_info)
 
