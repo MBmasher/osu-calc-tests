@@ -39,7 +39,7 @@ while True:
     tkinter.Label(root, text="beta:").grid(row=7, column=0)
     tkinter.Label(root, text="c:").grid(row=8, column=0)
     tkinter.Label(root, text="d:").grid(row=9, column=0)
-    tkinter.Label(root, text="Proposed variables: alpha=??, beta=??, c=??, d=??").grid(row=10, column=0, columnspan=2)
+    tkinter.Label(root, text="Proposed variables: alpha=.6, beta=.6, c=.5, d=1.2").grid(row=10, column=0, columnspan=2)
 
     map_link = tkinter.Entry(root, width=40)
     map_link.grid(row=0, column=1)

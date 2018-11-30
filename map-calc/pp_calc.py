@@ -109,7 +109,7 @@ def pp_calc(aim, speed, b, aim_length, speed_length, misses, c100, c50, used_mod
     old_aim_value = aim_value
 
     if used_mods.fl:
-        aim_value *= 1.45 * aim_length
+        aim_value *= 1.45 * old_length_bonus
         old_aim_value *= 1.45 * old_length_bonus
 
     aim_value *= aim_length
