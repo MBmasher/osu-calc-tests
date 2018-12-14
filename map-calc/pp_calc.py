@@ -109,8 +109,8 @@ def pp_calc(aim, speed, b, misses, c100, c50, used_mods=mods(), combo=0xFFFF, sc
 
     fl_aim_value = aim_value
 
-    fl_aim_bonus = 1 + 0.35 * min(1, total_hits / 250)
-    if total_hits > 250: fl_aim_bonus += 0.3 * min(1, (total_hits - 250) / 250)
+    fl_aim_bonus = 1 + 0.35 * min(1, total_hits / 200)
+    if total_hits > 200: fl_aim_bonus += 0.3 * min(1, (total_hits - 200) / 300)
     if total_hits > 500: fl_aim_bonus += (total_hits - 500) / 1200
 
     if used_mods.fl:
