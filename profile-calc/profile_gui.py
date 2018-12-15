@@ -98,6 +98,7 @@ except:
         root.mainloop()
 
 while True:
+
     root = Tk()
     root.resizable(width=False, height=True)
     root.geometry("1200x800")

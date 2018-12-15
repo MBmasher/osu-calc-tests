@@ -132,13 +132,16 @@ def return_values(c100, c50, misses, combo, map_id, mod_s):
     mod_string = mod_str(mod)
     map.apply_mods(mod)
     diff = diff_calc.main(map)
-    pp = pp_calc.pp_calc(diff[0], diff[1], diff[3], diff[4], diff[5], misses, c100, c50, mod, combo)
-
-
+    pp = pp_calc.pp_calc(
+        diff[0], diff[1],
+        diff[3],
+        misses,
+        c100, c50, mod,
+        combo)
 
     title = map.artist + " - " + map.title + "[" + map.version + "]"
     if mod_string != "":
         title += "+" + mod_string
     title += " (" + map.creator + ")"
 
-    return (str(title), pp.pp)
+    return (str(title), pp[0].pp)
