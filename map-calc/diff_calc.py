@@ -30,6 +30,8 @@ def main(file):
                 self.scaling_factor *= 1 + min((consts.circlesize_buff_threshhold - radius), 5) / 50.0
             self.norm_start = [float(self.ho.pos[0]) * self.scaling_factor, float(self.ho.pos[1]) * self.scaling_factor]
 
+            #print(self.norm_start)
+
             self.norm_end = self.norm_start
             # Calculate speed
             self.calculate_strain(prev, 0)
@@ -53,6 +55,7 @@ def main(file):
             self.strains[dtype] = prev.strains[dtype] * decay + res
 
         def spacing_weights(self, distance, diff_type):
+            #print(distance)
             if diff_type == 0:
                 if distance > consts.single_spacing:
                     return 2.5

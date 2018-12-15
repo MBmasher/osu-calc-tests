@@ -74,7 +74,7 @@ def set_mods(mod, m):
         mod.so = 1
 
 
-def return_values(c100_s, c50_s, misses_s, combo_s, file_name, mod_s):
+def return_values(c100_s, c50_s, misses_s, combo_s, file_name, mod_s, balancing_values):
     try:
         file = requests.get(b_info.main(file_name)).text.splitlines()
     except:
@@ -124,7 +124,8 @@ def return_values(c100_s, c50_s, misses_s, combo_s, file_name, mod_s):
     mod_string = mod_str(mod)
     map.apply_mods(mod)
     diff = diff_calc.main(map)
-    pp, aim_value, speed_value, acc_value, fl_pp, length_bonus, fl_length_bonus = pp_calc.pp_calc(diff[0], diff[1], diff[3], misses, c100, c50, mod, combo)
+    pp, aim_value, speed_value, acc_value, old_acc_value, old_pp = pp_calc.pp_calc(diff[0], diff[1], diff[0], diff[1], diff[3], misses, c100, c50, balancing_values, mod, combo)
+
 
     title = map.artist + " - " + map.title + "[" + map.version + "]"
     if mod_string != "":
@@ -132,7 +133,6 @@ def return_values(c100_s, c50_s, misses_s, combo_s, file_name, mod_s):
     title += " (" + map.creator + ")\n"
     map_s = "Map: {}\n".format(title)
     difficulty_settings = "AR: {:.2f} CS: {:.2f} OD: {:.2f}\n".format(map.ar, map.cs, map.od)
-    stars = "Stars: {:.2f}\n".format(diff[2])
     acc = "Acc: {:.2f}%\n\n".format(pp.acc_percent)
     circle_s = "Circles: {}\n".format(map.num_circles)
     slider_s = "Sliders: {}\n".format(map.num_sliders)
@@ -143,10 +143,11 @@ def return_values(c100_s, c50_s, misses_s, combo_s, file_name, mod_s):
     aim_vs = "Aim Value: {:.2f}PP\n".format(aim_value)
     speed_vs = "Speed Value: {:.2f}PP\n".format(speed_value)
     acc_vs = "Acc Value: {:.2f}PP\n\n".format(acc_value)
-    length_o = "Old FL Length Bonus: {:.2f}\n".format(length_bonus)
-    length_f = "New FL Length Bonus: {:.2f}\n\n".format(fl_length_bonus)
+    acc_ovs = "Old Acc Value: {:.2f}PP\n\n".format(old_acc_value)
+    stars = "Star Rating: {:.2f}\n\n".format(diff[2])
+    old_pps = "Old Performance: {:.2f}PP\n".format(old_pp)
     pp_s = "Performance: {:.2f}PP\n".format(pp.pp)
-    pp_l = "Performance After FL rework: {:.2f}PP\n".format(fl_pp)
 
-    return (map_s + difficulty_settings + stars + acc + circle_s + slider_s + spinner_s + object_s
-            + comb_s + miss_s + aim_vs + speed_vs + acc_vs + length_o + length_f + pp_s + pp_l)
+    return (map_s + difficulty_settings +  acc + circle_s + slider_s + spinner_s + object_s
+            + comb_s + miss_s +
+            aim_vs + speed_vs + acc_vs + acc_ovs + stars + old_pps + pp_s)

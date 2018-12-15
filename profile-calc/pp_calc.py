@@ -69,7 +69,7 @@ def pp_calc(aim, speed, b, misses, c100, c50, used_mods=mods(), combo=0xFFFF, sc
     acc = acc_calc(c300, c100, c50, misses)
     res.acc_percent = acc * 100.0
 
-    aim_value = base_strain(aim)
+    aim_value = base_strain(aim**0.8)
 
     total_hits_over_2k = total_hits / 2000.0
     length_bonus = 0.95 + 0.4 * min(1.0, total_hits_over_2k) + (
@@ -101,10 +101,7 @@ def pp_calc(aim, speed, b, misses, c100, c50, used_mods=mods(), combo=0xFFFF, sc
         aim_value *= 1.02 + (11 - ar) / 50
 
     if used_mods.fl:
-        fl_aim_bonus = 1 + 0.35 * min(1, total_hits / 200)
-        if total_hits > 250: fl_aim_bonus += 0.3 * min(1, (total_hits - 200) / 300)
-        if total_hits > 500: fl_aim_bonus += (total_hits - 500) / 1200
-        aim_value *= fl_aim_bonus
+        aim_value *= 1.45 * length_bonus
 
     acc_bonus = 0.5 + acc / 2.0
 
@@ -138,7 +135,7 @@ def pp_calc(aim, speed, b, misses, c100, c50, used_mods=mods(), combo=0xFFFF, sc
             real_acc = ((c300 - (total_hits - circles)) * 300.0 + c100 * 100.0 + c50 * 50.0) / (circles * 300)
         real_acc = max(0.0, real_acc)
 
-    acc_value = math.pow(1.52163, od) * math.pow(real_acc, 24.0) * 2.83
+    acc_value = math.pow(1.58, od) * math.pow(real_acc, 14.0) * 3
 
     acc_value *= min(1.15, math.pow(circles / 1000.0, 0.3))
 

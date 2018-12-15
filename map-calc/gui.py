@@ -11,14 +11,16 @@ def kill():
 
 
 def calculate_pp():
-    global map_link, c100, c50, miss, combo, info_l, alpha, beta, c_, d_
+    global map_link, c100, c50, miss, combo, info_l, alpha, beta, d_
     info_l["text"] = calc.return_values(c100.get(),
                                         c50.get(),
                                         miss.get(),
                                         combo.get(),
                                         map_link.get(),
-                                        mods.get()
-                                        )
+                                        mods.get(),
+                                        (float(acc_a.get()),
+                                         float(acc_b.get()),
+                                         float(acc_d.get())))
 
 
 while True:
@@ -32,6 +34,10 @@ while True:
     tkinter.Label(root, text="(Optional) Amount of misses:").grid(row=3, column=0)
     tkinter.Label(root, text="(Optional) Combo:").grid(row=4, column=0)
     tkinter.Label(root, text="(Optional) Mods:").grid(row=5, column=0)
+    tkinter.Label(root, text="acc_a:").grid(row=6, column=0)
+    tkinter.Label(root, text="acc_b:").grid(row=7, column=0)
+    tkinter.Label(root, text="acc_d:").grid(row=8, column=0)
+    tkinter.Label(root, text="Current variables: acc_a=1.52163, acc_b=24, acc_d=2.83\nProposed variables: acc_a=1.58, acc_b=14, acc_d=3").grid(row=9, column=0, columnspan=2)
 
     map_link = tkinter.Entry(root, width=40)
     map_link.grid(row=0, column=1)
@@ -51,10 +57,19 @@ while True:
     mods = tkinter.Entry(root, width=40)
     mods.grid(row=5, column=1)
 
-    tkinter.Button(root, fg="blue", text="Calculate pp!", command=calculate_pp).grid(row=6, column=0, columnspan=2)
+    acc_a = tkinter.Entry(root, width=40)
+    acc_a.grid(row=6, column=1)
+
+    acc_b = tkinter.Entry(root, width=40)
+    acc_b.grid(row=7, column=1)
+
+    acc_d = tkinter.Entry(root, width=40)
+    acc_d.grid(row=8, column=1)
+
+    tkinter.Button(root, fg="blue", text="Calculate pp!", command=calculate_pp).grid(row=10, column=0, columnspan=2)
 
     info_l = tkinter.Label(root)
-    info_l.grid(row=7, column=0, columnspan=2)
+    info_l.grid(row=11, column=0, columnspan=2)
 
     # If window is closed, stop the program.
     root.protocol("WM_DELETE_WINDOW", kill)
