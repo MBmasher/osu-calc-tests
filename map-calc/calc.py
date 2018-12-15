@@ -1,4 +1,5 @@
 import diff_calc
+import new_diff_calc
 import requests
 import pp_calc
 import sys
@@ -74,7 +75,7 @@ def set_mods(mod, m):
         mod.so = 1
 
 
-def return_values(c100_s, c50_s, misses_s, combo_s, file_name, mod_s, balancing_values):
+def return_values(c100_s, c50_s, misses_s, combo_s, file_name, mod_s):
     try:
         file = requests.get(b_info.main(file_name)).text.splitlines()
     except:
@@ -123,8 +124,10 @@ def return_values(c100_s, c50_s, misses_s, combo_s, file_name, mod_s, balancing_
 
     mod_string = mod_str(mod)
     map.apply_mods(mod)
-    diff = diff_calc.main(map, balancing_values)
-    pp, aim_value, speed_value, acc_value, length_bonus, aim_length, speed_length, old_pp = pp_calc.pp_calc(diff[0], diff[1], diff[3], diff[4], diff[5], misses, c100, c50, mod, combo)
+    diff = diff_calc.main(map)
+    new_diff = new_diff_calc.main(map)
+    pp, aim_value, speed_value, acc_value, old_aim_value, old_speed_value, old_pp, new_sr, td_pp = pp_calc.pp_calc(diff[0], diff[1], new_diff[0], new_diff[1], diff[3], misses, c100, c50, mod, combo)
+
 
     title = map.artist + " - " + map.title + "[" + map.version + "]"
     if mod_string != "":
@@ -132,7 +135,6 @@ def return_values(c100_s, c50_s, misses_s, combo_s, file_name, mod_s, balancing_
     title += " (" + map.creator + ")\n"
     map_s = "Map: {}\n".format(title)
     difficulty_settings = "AR: {:.2f} CS: {:.2f} OD: {:.2f}\n".format(map.ar, map.cs, map.od)
-    stars = "Stars: {:.2f}\n".format(diff[2])
     acc = "Acc: {:.2f}%\n\n".format(pp.acc_percent)
     circle_s = "Circles: {}\n".format(map.num_circles)
     slider_s = "Sliders: {}\n".format(map.num_sliders)
@@ -143,14 +145,14 @@ def return_values(c100_s, c50_s, misses_s, combo_s, file_name, mod_s, balancing_
     aim_vs = "Aim Value: {:.2f}PP\n".format(aim_value)
     speed_vs = "Speed Value: {:.2f}PP\n".format(speed_value)
     acc_vs = "Acc Value: {:.2f}PP\n\n".format(acc_value)
-    aim_ts = "Aim Total Value: {:.0f}\n".format(diff[6][1])
-    speed_ts = "Speed Total Value: {:.0f}\n\n".format(diff[7][1])
-    length_os = "Old Length Bonus: {:.4f}\n".format(length_bonus)
-    length_as = "New Aim Length Bonus: {:.4f}\n".format(aim_length)
-    length_vs = "New Speed Length Bonus: {:.4f}\n\n".format(speed_length)
-    pp_os = "Old Performance: {:.2f}PP\n".format(old_pp)
-    pp_s = "New Performance: {:.2f}PP\n".format(pp.pp)
+    aim_ovs = "Old Aim Value: {:.2f}PP\n".format(old_aim_value)
+    speed_ovs = "Old Speed Value: {:.2f}PP\n\n".format(old_speed_value)
+    stars = "Old Star Rating: {:.2f}\n".format(diff[2])
+    new_srs = "New Star Rating: {:.2f}\n\n".format(new_sr)
+    old_pps = "Old Performance: {:.2f}PP\n".format(old_pp)
+    td_pps = "Performance with TD: {:.2f}PP\n".format(td_pp)
+    pp_s = "Performance: {:.2f}PP\n".format(pp.pp)
 
-    return (map_s + difficulty_settings + stars + acc + circle_s + slider_s + spinner_s + object_s
-            + comb_s + miss_s + aim_vs + speed_vs + acc_vs + aim_ts
-            + speed_ts + length_os + length_as + length_vs + pp_os + pp_s)
+    return (map_s + difficulty_settings +  acc + circle_s + slider_s + spinner_s + object_s
+            + comb_s + miss_s + aim_ovs + speed_ovs +
+            aim_vs + speed_vs + acc_vs + stars + new_srs + old_pps + td_pps + pp_s)

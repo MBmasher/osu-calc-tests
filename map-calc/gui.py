@@ -17,11 +17,7 @@ def calculate_pp():
                                         miss.get(),
                                         combo.get(),
                                         map_link.get(),
-                                        mods.get(),
-                                        (float(alpha.get()),
-                                         float(beta.get()),
-                                         float(c_.get()),
-                                         float(d_.get())))
+                                        mods.get())
 
 
 while True:
@@ -35,11 +31,6 @@ while True:
     tkinter.Label(root, text="(Optional) Amount of misses:").grid(row=3, column=0)
     tkinter.Label(root, text="(Optional) Combo:").grid(row=4, column=0)
     tkinter.Label(root, text="(Optional) Mods:").grid(row=5, column=0)
-    tkinter.Label(root, text="alpha:").grid(row=6, column=0)
-    tkinter.Label(root, text="beta:").grid(row=7, column=0)
-    tkinter.Label(root, text="c:").grid(row=8, column=0)
-    tkinter.Label(root, text="d:").grid(row=9, column=0)
-    tkinter.Label(root, text="Proposed variables: alpha=.6, beta=.6, c=.5, d=1.2").grid(row=10, column=0, columnspan=2)
 
     map_link = tkinter.Entry(root, width=40)
     map_link.grid(row=0, column=1)
@@ -59,22 +50,10 @@ while True:
     mods = tkinter.Entry(root, width=40)
     mods.grid(row=5, column=1)
 
-    alpha = tkinter.Entry(root, width=40)
-    alpha.grid(row=6, column=1)
-
-    beta = tkinter.Entry(root, width=40)
-    beta.grid(row=7, column=1)
-
-    c_ = tkinter.Entry(root, width=40)
-    c_.grid(row=8, column=1)
-
-    d_ = tkinter.Entry(root, width=40)
-    d_.grid(row=9, column=1)
-
-    tkinter.Button(root, fg="blue", text="Calculate pp!", command=calculate_pp).grid(row=11, column=0, columnspan=2)
+    tkinter.Button(root, fg="blue", text="Calculate pp!", command=calculate_pp).grid(row=6, column=0, columnspan=2)
 
     info_l = tkinter.Label(root)
-    info_l.grid(row=12, column=0, columnspan=2)
+    info_l.grid(row=7, column=0, columnspan=2)
 
     # If window is closed, stop the program.
     root.protocol("WM_DELETE_WINDOW", kill)

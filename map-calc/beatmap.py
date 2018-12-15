@@ -109,7 +109,7 @@ class Beatmap:
             temp_tp = line.split("\r")[0].split("\n")[0].split(",")
 
             if temp_tp[0] != '':
-                if len(temp_tp) < 7:
+                if len(temp_tp) < 3:
                     self.timing_points.append(timing_point(temp_tp[0], temp_tp[1], 0))
                 else:
                     self.timing_points.append(timing_point(temp_tp[0], temp_tp[1], temp_tp[6]))

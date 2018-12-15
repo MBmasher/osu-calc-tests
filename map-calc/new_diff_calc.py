@@ -19,7 +19,7 @@ def main(file):
         circlesize_buff_threshhold = 30
 
     class d_obj:
-        def __init__(self, base_object, radius, prev):
+        def __init__(self, base_object, radius, prev, prev2):
             radius = float(radius)
             self.ho = base_object
             self.strains = [1, 1]
@@ -30,16 +30,14 @@ def main(file):
                 self.scaling_factor *= 1 + min((consts.circlesize_buff_threshhold - radius), 5) / 50.0
             self.norm_start = [float(self.ho.pos[0]) * self.scaling_factor, float(self.ho.pos[1]) * self.scaling_factor]
 
-            #print(self.norm_start)
-
             self.norm_end = self.norm_start
             # Calculate speed
-            self.calculate_strain(prev, 0)
+            self.calculate_strain(prev, prev2, 0)
             # Calculate aim
-            self.calculate_strain(prev, 1)
+            self.calculate_strain(prev, prev2, 1)
 
-        def calculate_strain(self, prev, dtype):
-            if (prev == None):
+        def calculate_strain(self, prev, prev2, dtype):
+            if (prev == None or prev2 == None):
                 return
             res = 0
             time_elapsed = int(self.ho.time) - int(prev.ho.time)
@@ -47,7 +45,7 @@ def main(file):
             scaling = consts.weight_scaling[dtype]
             if self.ho.h_type == 1 or self.ho.h_type == 2:
                 dis = math.sqrt(
-                    math.pow(self.norm_start[0] - prev.norm_end[0], 2) + math.pow(self.norm_start[1] - prev.norm_end[1],
+                    math.pow(self.norm_start[0] - prev2.norm_end[0], 2) + math.pow(self.norm_start[1] - prev2.norm_end[1],
                                                                                   2))
 
                 res = self.spacing_weights(dis, dtype) * scaling
@@ -55,7 +53,6 @@ def main(file):
             self.strains[dtype] = prev.strains[dtype] * decay + res
 
         def spacing_weights(self, distance, diff_type):
-            #print(distance)
             if diff_type == 0:
                 if distance > consts.single_spacing:
                     return 2.5
@@ -77,24 +74,26 @@ def main(file):
     def calculate_difficulty(type, objects):
         strain_step = 400
         prev = None
+        prev2 = None
         max_strain = 0
         decay_weight = 0.9
         highest_strains = []
         interval_end = strain_step
         for obj in map.objects:
-            new = d_obj(obj, radius, prev)
+            new = d_obj(obj, radius, prev, prev2)
             objects.append(new)
             while int(new.ho.time) > interval_end:
                 highest_strains.append(max_strain)
-                if prev == None:
+                if prev == None or prev2 == None:
                     max_strain = 0
                 else:
                     decay = math.pow(consts.decay_base[type], (interval_end - int(prev.ho.time)) / 1000.0)
                     max_strain = prev.strains[type] * decay
                 interval_end += strain_step
+            prev2 = prev
             prev = new
             max_strain = max(new.strains[type], max_strain)
-        # print max_strain
+        print(max_strain)
         difficulty = 0
         weight = 1.0
         highest_strains = sorted(highest_strains, reverse=True)
@@ -111,4 +110,5 @@ def main(file):
     speed = math.sqrt(speed) * star_scaling_factor
 
     stars = aim + speed + abs(speed - aim) * extreme_scaling_factor
+    print(stars)
     return [aim, speed, stars, map]
