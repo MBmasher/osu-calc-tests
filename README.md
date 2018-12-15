@@ -1,4 +1,4 @@
-# osu-calc-tests-fl-patch
+# osu-calc-tests-touch-acc
 
 There are two directories in this project: "map-calc", which calculates a specific map, and "profile-calc", which calculates play for a whole profile.
 
