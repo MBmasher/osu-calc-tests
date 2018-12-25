@@ -1,4 +1,4 @@
-# osu-calc-length-bonus
+# osu-calc-tests
 
 Original program by HyperBCS: https://github.com/HyperBCS/osu-calc
 
