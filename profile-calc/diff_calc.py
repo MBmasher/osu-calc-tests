@@ -1,5 +1,6 @@
 import math
 
+
 def main(file):
     map = file
     objects = []
@@ -47,27 +48,24 @@ def main(file):
                     math.pow(self.norm_start[0] - prev.norm_end[0], 2) + math.pow(self.norm_start[1] - prev.norm_end[1],
                                                                                   2))
 
-                res = self.spacing_weights(dis, dtype, time_elapsed) * scaling
+                res = self.spacing_weights(dis, dtype) * scaling
             res /= max(time_elapsed, 50)
             self.strains[dtype] = prev.strains[dtype] * decay + res
 
-        def spacing_weights(self, distance, diff_type, delta_time):
+        def spacing_weights(self, distance, diff_type):
             if diff_type == 0:
-                speed_bonus = 1
-
-                #if delta_time < 68:
-                #    speed_bonus = 68 / float(delta_time)
-
                 if distance > consts.single_spacing:
-                    return speed_bonus * (2.5)
+                    return 2.5
                 elif distance > consts.stream_spacing:
-                    return speed_bonus * (1.6 + 0.9 * (distance - consts.stream_spacing) / (consts.single_spacing - consts.stream_spacing))
+                    return 1.6 + 0.9 * (distance - consts.stream_spacing) / (
+                            consts.single_spacing - consts.stream_spacing)
                 elif distance > consts.almost_diameter:
-                    return speed_bonus * (1.2 + 0.4 * (distance - consts.almost_diameter) / (consts.stream_spacing - consts.almost_diameter))
+                    return 1.2 + 0.4 * (distance - consts.almost_diameter) / (
+                            consts.stream_spacing - consts.almost_diameter)
                 elif distance > (consts.almost_diameter / 2.0):
-                    return speed_bonus * (0.95 + 0.25 * (distance - consts.almost_diameter / 2.0) / (consts.almost_diameter / 2.0))
+                    return 0.95 + 0.25 * (distance - consts.almost_diameter / 2.0) / (consts.almost_diameter / 2.0)
                 else:
-                    return speed_bonus * (0.95)
+                    return 0.95
             elif diff_type == 1:
                 return math.pow(distance, 0.99)
             else:
@@ -94,40 +92,20 @@ def main(file):
             prev = new
             max_strain = max(new.strains[type], max_strain)
         # print max_strain
-        total = 0
         difficulty = 0
         weight = 1.0
         highest_strains = sorted(highest_strains, reverse=True)
         for strain in highest_strains:
-            total += strain ** 1.2
             difficulty += weight * strain
             weight *= decay_weight
-        print_values = [total, difficulty]
-        return difficulty, print_values
-
+        return difficulty
 
     star_scaling_factor = 0.0675
     extreme_scaling_factor = 0.5
-    aim, aim_print_values = calculate_difficulty(1, objects)
-    speed, speed_print_values = calculate_difficulty(0, objects)
+    aim = calculate_difficulty(1, objects)
+    speed = calculate_difficulty(0, objects)
     aim = math.sqrt(aim) * star_scaling_factor
     speed = math.sqrt(speed) * star_scaling_factor
 
-
     stars = aim + speed + abs(speed - aim) * extreme_scaling_factor
-
-    alpha = .6
-    beta = .6
-    c = .5
-
-    aim_total = aim_print_values[0]
-    aim_difficulty = aim_print_values[1]
-    speed_total = speed_print_values[0]
-    speed_difficulty = speed_print_values[1]
-
-    aim_length_bonus = c + beta * (math.log10(aim_total/aim_difficulty) - alpha)
-    aim_length_bonus = max(0.8, aim_length_bonus)
-    speed_length_bonus = c + beta * (math.log10(speed_total/speed_difficulty) - alpha)
-    speed_length_bonus = max(0.8, speed_length_bonus)
-
-    return [aim, speed, stars, map, aim_length_bonus, speed_length_bonus, aim_print_values, speed_print_values]
+    return [aim, speed, stars, map]
